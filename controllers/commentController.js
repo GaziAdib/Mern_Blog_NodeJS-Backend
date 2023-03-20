@@ -37,4 +37,35 @@ const createComment = async (req, res) => {
 }
 
 
-export { createComment, getComments }
+const addReply = async (req, res) => {
+    let id = req.params?.commentId;
+    try {
+        if (id) {
+            const comment = await Comment.findById(id);
+
+            if (!comment) {
+                return res.status(404).json({ msg: 'Comment not found' });
+            }
+
+            const reply = {
+                commentId: comment?._id,
+                username: req.body?.username,
+                reply: req.body?.reply,
+            }
+
+            comment?.replies.unshift(reply);
+
+            await comment.save();
+
+            res.json(comment);
+
+        } else {
+            res.status(404).json({ message: 'Post with this id not found!' })
+        }
+
+    } catch (error) {
+        res.status(401).json({ message: 'Problem with Getting Comment From Server', error: error });
+    }
+}
+
+export { createComment, getComments, addReply }

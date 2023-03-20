@@ -13,7 +13,21 @@ const commentSchema = new mongoose.Schema({
     comment: {
         type: String,
         required: true,
-    }
+    },
+    replies: [{
+        username: {
+            type: String,
+            required: true,
+        },
+        commentId: {
+            type: Schema.Types.ObjectId,
+            required: true,
+        },
+        reply: {
+            type: String,
+            required: true
+        }
+    }]
 }, {
     timestamps: true
 })
