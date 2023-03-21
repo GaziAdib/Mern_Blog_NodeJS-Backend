@@ -6,11 +6,11 @@ const getComments = async (req, res) => {
         if (id) {
             let comments = await Comment.find({ postId: id }).sort({ createdAt: 'desc' });
 
-            let replies = comments?.map((comment) => {
-                return comment?.replies?.reverse();
-            })
+            // let replies = comments?.map((comment) => {
+            //     return comment?.replies?.reverse();
+            // })
 
-            comments = [...comments, replies];
+            //comments = [...comments, [...replies]];
 
             res.json(comments);
         } else {
@@ -69,8 +69,6 @@ const addReply = async (req, res) => {
 
             // test
             let comment = await Comment.findByIdAndUpdate({ _id: id }, { $push: { replies: reply } })
-
-
 
 
             // test end
