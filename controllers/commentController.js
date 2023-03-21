@@ -6,13 +6,15 @@ const getComments = async (req, res) => {
         if (id) {
             let comments = await Comment.find({ postId: id }).sort({ createdAt: 'desc' });
 
-            // let replies = comments?.map((comment) => {
-            //     return comment?.replies?.reverse();
-            // })
+            let replies = comments?.map((comment) => {
+                return comment?.replies?.length >= 0 ? comment?.replies?.reverse() : []
+            })
 
-            //comments = [...comments, [...replies]];
+            //comment.replies || []
+            let newcomments = [...comments, replies]
+                .slice(0, replies?.length);
 
-            res.json(comments);
+            res.json(newcomments);
         } else {
             res.status(404).json({ message: 'There is Not Post id there to get all comments', error: error });
         }
