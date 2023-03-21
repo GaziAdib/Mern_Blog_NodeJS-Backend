@@ -4,7 +4,14 @@ const getComments = async (req, res) => {
     const id = req.params.postId
     try {
         if (id) {
-            const comments = await Comment.find({ postId: id });
+            let comments = await Comment.find({ postId: id }).sort({ createdAt: 'desc' });
+
+            let replies = comments?.map((comment) => {
+                return comment?.replies?.reverse();
+            })
+
+            comments = [...comments, replies];
+
             res.json(comments);
         } else {
             res.status(404).json({ message: 'There is Not Post id there to get all comments', error: error });
@@ -41,21 +48,36 @@ const addReply = async (req, res) => {
     let id = req.params?.commentId;
     try {
         if (id) {
-            const comment = await Comment.findById(id);
+            // const commentId = await Comment.findById(id);
 
-            if (!comment) {
-                return res.status(404).json({ msg: 'Comment not found' });
-            }
+
+            // if (!comment) {
+            //     return res.status(404).json({ msg: 'Comment not found' });
+            // }
+
+            // const reply = {
+            //     commentId: comment?._id,
+            //     username: req.body?.username,
+            //     reply: req.body?.reply,
+            // }
 
             const reply = {
-                commentId: comment?._id,
+                commentId: id,
                 username: req.body?.username,
                 reply: req.body?.reply,
             }
 
-            comment?.replies.unshift(reply);
+            // test
+            let comment = await Comment.findByIdAndUpdate({ _id: id }, { $push: { replies: reply } })
 
-            await comment.save();
+
+
+
+            // test end
+
+            //comment?.replies.unshift(reply);
+
+            //await comment.save();
 
             res.json(comment);
 

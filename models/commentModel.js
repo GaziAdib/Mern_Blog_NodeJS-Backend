@@ -26,6 +26,10 @@ const commentSchema = new mongoose.Schema({
         reply: {
             type: String,
             required: true
+        },
+        createdAt: {
+            type: Date,
+            default: new Date().getTime()
         }
     }]
 }, {
