@@ -6,6 +6,7 @@ const getComments = async (req, res) => {
         if (id) {
             let comments = await Comment.find({ postId: id }).sort({ createdAt: 'desc' });
 
+
             let replies = comments?.map((comment) => {
                 return comment?.replies?.length >= 0 ? comment?.replies?.reverse() : []
             })
@@ -13,6 +14,8 @@ const getComments = async (req, res) => {
             //comment.replies || []
             let newcomments = [...comments, replies]
                 .slice(0, replies?.length);
+
+            console.log('new comments----------', newcomments);
 
             res.json(newcomments);
         } else {
@@ -70,7 +73,7 @@ const addReply = async (req, res) => {
             }
 
             // test
-            let comment = await Comment.findByIdAndUpdate({ _id: id }, { $push: { replies: reply } })
+            let comment = await Comment.findByIdAndUpdate({ _id: id }, { $push: { replies: reply } }, { new: true })
 
 
             // test end
@@ -90,4 +93,21 @@ const addReply = async (req, res) => {
     }
 }
 
-export { createComment, getComments, addReply }
+const deleteReply = async (req, res) => {
+    let id = req.params?.commentId;
+    let replyId = req.params?.replyId;
+    try {
+        if (id && replyId) {
+            let comment = await Comment.findByIdAndUpdate({ _id: id }, { $pull: { replies: { _id: replyId } } }, { new: true },)
+            res.json(comment);
+        } else {
+            res.status(404).json({ message: 'Post with this id not found!' })
+        }
+
+    } catch (error) {
+        res.status(401).json({ message: 'Problem with Getting Comment From Server', error: error });
+    }
+}
+
+
+export { createComment, getComments, addReply, deleteReply }
