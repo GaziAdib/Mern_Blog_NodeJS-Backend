@@ -48,23 +48,10 @@ const createComment = async (req, res) => {
     }
 }
 
-
 const addReply = async (req, res) => {
     let id = req.params?.commentId;
     try {
         if (id) {
-            // const commentId = await Comment.findById(id);
-
-
-            // if (!comment) {
-            //     return res.status(404).json({ msg: 'Comment not found' });
-            // }
-
-            // const reply = {
-            //     commentId: comment?._id,
-            //     username: req.body?.username,
-            //     reply: req.body?.reply,
-            // }
 
             const reply = {
                 commentId: id,
@@ -72,20 +59,12 @@ const addReply = async (req, res) => {
                 reply: req.body?.reply,
             }
 
-            // test
             let comment = await Comment.findByIdAndUpdate({ _id: id }, { $push: { replies: reply } }, { new: true })
-
-
-            // test end
-
-            //comment?.replies.unshift(reply);
-
-            //await comment.save();
 
             res.json(comment);
 
         } else {
-            res.status(404).json({ message: 'Post with this id not found!' })
+            res.status(404).json({ message: 'Comment with this id not found!' })
         }
 
     } catch (error) {
@@ -111,3 +90,79 @@ const deleteReply = async (req, res) => {
 
 
 export { createComment, getComments, addReply, deleteReply }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// const addReply = async (req, res) => {
+//     let id = req.params?.commentId;
+//     try {
+//         if (id) {
+//             // const commentId = await Comment.findById(id);
+
+
+//             // if (!comment) {
+//             //     return res.status(404).json({ msg: 'Comment not found' });
+//             // }
+
+//             // const reply = {
+//             //     commentId: comment?._id,
+//             //     username: req.body?.username,
+//             //     reply: req.body?.reply,
+//             // }
+
+//             const reply = {
+//                 commentId: id,
+//                 username: req.body?.username,
+//                 reply: req.body?.reply,
+//             }
+
+
+
+//             // test
+//             let comment = await Comment.findByIdAndUpdate({ _id: id }, { $push: { replies: reply } }, { new: true })
+
+
+//             // test end
+
+//             //comment?.replies.unshift(reply);
+
+//             //await comment.save();
+
+//             res.json(comment);
+
+
+//         } else {
+//             res.status(404).json({ message: 'Post with this id not found!' })
+//         }
+
+//     } catch (error) {
+//         res.status(401).json({ message: 'Problem with Getting Comment From Server', error: error });
+//     }
+// }

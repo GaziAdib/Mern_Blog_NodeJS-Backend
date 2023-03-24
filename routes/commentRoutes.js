@@ -8,9 +8,9 @@ router.post('/:postId/createComment', createComment);
 
 router.get('/:postId/comments', getComments);
 
-router.put('/comments/:commentId/reply', addReply)
+router.put('/:commentId/reply', addReply)
 
-router.delete('/comments/:commentId/replies/:replyId', deleteReply)
+router.delete('/:commentId/replies/:replyId', deleteReply)
 
 
 export default router;
